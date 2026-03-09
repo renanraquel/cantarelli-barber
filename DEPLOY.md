@@ -17,9 +17,9 @@ Cada serviço no Render roda **isolado** com sua própria URL. **Não há confli
 1. **New** → **Web Service**
 2. Conecte ao repositório: `renanraquel/cantarelli-barber`
 3. **Root Directory:** `backend`
-4. **Runtime:** Java
-5. **Build Command:** `mvn clean package -DskipTests`
-6. **Start Command:** `java -jar target/game-catarelli-barber-backend-0.0.1-SNAPSHOT.jar`
+4. **Runtime:** **Docker** (Render não tem Java nativo – use Docker)
+5. O Render detecta o `Dockerfile` na pasta backend e faz o build automaticamente
+6. **Nenhum comando extra** – o Dockerfile já define build e start
 
 **Environment Variables:**
 
