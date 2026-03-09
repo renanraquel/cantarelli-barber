@@ -174,9 +174,12 @@ async function saveBarber() {
       form.photoUrl = updated.photoUrl;
     } else {
       const created = await barberService.create(payload);
-      // Mantém o barbeiro recém-criado no modo de edição para permitir upload imediato
       form.id = created.id;
       form.photoUrl = created.photoUrl;
+      // Se já tinha foto selecionada, envia automaticamente após criar
+      if (selectedFile.value) {
+        await uploadPhoto();
+      }
     }
     await loadBarbers();
   } finally {
