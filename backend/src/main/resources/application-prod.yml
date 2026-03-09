@@ -29,6 +29,8 @@ server:
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-production-min-32-chars}
   uploads:
     dir: ${UPLOADS_DIR:./uploads}
   auth:

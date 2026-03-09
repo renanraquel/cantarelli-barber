@@ -30,6 +30,7 @@ Cada serviço no Render roda **isolado** com sua própria URL. **Não há confli
 | `JDBC_DATABASE_USERNAME` | *(do PostgreSQL)* |
 | `JDBC_DATABASE_PASSWORD` | *(do PostgreSQL)* |
 | `CORS_ALLOWED_ORIGINS` | `https://cantarelli-barber-1.onrender.com` *(URL do frontend no Render)* |
+| `JWT_SECRET` | Uma string secreta com **pelo menos 32 caracteres** (ex: uma senha forte). Usada para assinar o token de login. |
 
 Depois de criar, copie a **URL do backend** (ex: `https://cantarelli-barber.onrender.com`).
 

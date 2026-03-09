@@ -40,7 +40,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { authService } from '../services/api';
+import { authService, setAuthToken } from '../services/api';
 import { setAuthUser } from '../stores/auth';
 
 const router = useRouter();
@@ -55,6 +55,7 @@ async function submit() {
   loading.value = true;
   try {
     const data = await authService.login(username.value, password.value);
+    if (data.token) setAuthToken(data.token);
     setAuthUser(data);
     const redirect = route.query.redirect || '/';
     router.replace(redirect);

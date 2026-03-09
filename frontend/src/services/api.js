@@ -4,10 +4,41 @@ const isDev = import.meta.env.DEV;
 export const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL
   || (isDev ? '' : 'http://localhost:8080');
 
+const STORAGE_KEY = 'game-cantarelli-token';
+
+function getStoredToken() {
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+let authToken = getStoredToken();
+
+export function setAuthToken(token) {
+  authToken = token || null;
+  if (token) localStorage.setItem(STORAGE_KEY, token);
+  else localStorage.removeItem(STORAGE_KEY);
+}
+
 const api = axios.create({
   baseURL: BACKEND_BASE_URL ? `${BACKEND_BASE_URL}/api` : '/api',
   withCredentials: true
 });
+
+api.interceptors.request.use((config) => {
+  if (authToken) config.headers.Authorization = `Bearer ${authToken}`;
+  return config;
+});
+
+api.interceptors.response.use(
+  (r) => r,
+  (err) => {
+    if (err.response?.status === 401) setAuthToken(null);
+    return Promise.reject(err);
+  }
+);
 
 export const authService = {
   async login(username, password) {
@@ -15,7 +46,8 @@ export const authService = {
     return data;
   },
   async logout() {
-    await api.post('/auth/logout');
+    try { await api.post('/auth/logout'); } catch (_) { /* ignore */ }
+    setAuthToken(null);
   },
   async me() {
     const { data } = await api.get('/auth/me');

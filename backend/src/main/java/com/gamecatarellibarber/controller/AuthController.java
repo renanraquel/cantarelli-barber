@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import com.gamecatarellibarber.config.JwtService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -26,11 +28,14 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
+    private final JwtService jwtService;
 
     public AuthController(AuthenticationManager authenticationManager,
-                          SecurityContextRepository securityContextRepository) {
+                          SecurityContextRepository securityContextRepository,
+                          JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
+        this.jwtService = jwtService;
     }
 
     public record LoginRequest(String username, String password) {}
@@ -57,7 +62,8 @@ public class AuthController {
             String role = auth.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .anyMatch(a -> a.equals("ROLE_ADMIN")) ? "ADMIN" : "BARBER";
-            return ResponseEntity.ok(Map.of("username", request.username(), "role", role));
+            String token = jwtService.generateToken(request.username(), role);
+            return ResponseEntity.ok(Map.of("username", request.username(), "role", role, "token", token));
         } catch (AuthenticationException e) {
             log.warn("[AUTH] login failed user={}", request.username());
             return ResponseEntity.status(401).body(Map.of("error", "Usuário ou senha inválidos"));

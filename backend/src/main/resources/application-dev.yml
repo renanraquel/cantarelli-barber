@@ -25,6 +25,8 @@ logging:
 app:
   uploads:
     dir: ./uploads
+  jwt:
+    secret: dev-secret-key-min-32-chars-for-hs256
   auth:
     users:
       cantarelli: cantarelli@2026

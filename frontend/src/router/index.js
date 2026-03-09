@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { authService } from '../services/api';
+import { authService, setAuthToken } from '../services/api';
 import { setAuthUser, clearAuthUser } from '../stores/auth';
 
 import LoginPage from '../pages/LoginPage.vue';
@@ -52,6 +52,7 @@ router.beforeEach(async (to) => {
     return true;
   } catch {
     clearAuthUser();
+    setAuthToken(null);
     return { path: '/login', query: { redirect: to.fullPath } };
   }
 });
