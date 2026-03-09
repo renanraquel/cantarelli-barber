@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: game-catarelli-barber
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        domain: localhost
+        path: /
+        same-site: lax
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+

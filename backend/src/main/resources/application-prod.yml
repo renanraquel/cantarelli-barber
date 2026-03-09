@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/gamecatarellibarber}
+    username: ${JDBC_DATABASE_USERNAME:postgres}
+    password: ${JDBC_DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+
+server:
+  port: ${PORT:8080}
+
+app:
+  uploads:
+    dir: ${UPLOADS_DIR:./uploads}
+  auth:
+    users:
+      cantarelli: ${AUTH_USER_CANTARELLI:cantarelli@2026}
+      barber: ${AUTH_USER_BARBER:barber@2026}
+    roles:
+      cantarelli: ADMIN
+      barber: BARBER
+
