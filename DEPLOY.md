@@ -29,9 +29,9 @@ Cada serviço no Render roda **isolado** com sua própria URL. **Não há confli
 | `JDBC_DATABASE_URL` | *(Internal URL do PostgreSQL – copie do banco)* |
 | `JDBC_DATABASE_USERNAME` | *(do PostgreSQL)* |
 | `JDBC_DATABASE_PASSWORD` | *(do PostgreSQL)* |
-| `CORS_ALLOWED_ORIGINS` | `https://SEU-FRONTEND.onrender.com` *(veja a URL do front depois)* |
+| `CORS_ALLOWED_ORIGINS` | `https://cantarelli-barber-1.onrender.com` *(URL do frontend no Render)* |
 
-Depois de criar, copie a **URL do backend** (ex: `https://cantarelli-barber-api.onrender.com`).
+Depois de criar, copie a **URL do backend** (ex: `https://cantarelli-barber.onrender.com`).
 
 ---
 
@@ -47,9 +47,9 @@ Depois de criar, copie a **URL do backend** (ex: `https://cantarelli-barber-api.
 
 | Key | Value |
 |-----|-------|
-| `VITE_BACKEND_BASE_URL` | `https://SUA-URL-DO-BACKEND.onrender.com` |
+| `VITE_BACKEND_BASE_URL` | `https://cantarelli-barber.onrender.com` |
 
-Depois de criar o frontend, volte no backend e atualize `CORS_ALLOWED_ORIGINS` com a URL do frontend.
+Obrigatório: essa variável é embutida no build. Sem ela, o front chama localhost:8080 em produção.
 
 ---
 

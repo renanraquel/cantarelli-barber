@@ -1,4 +1,8 @@
 spring:
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/gamecatarellibarber}
     username: ${JDBC_DATABASE_USERNAME:postgres}
