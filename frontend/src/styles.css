@@ -619,6 +619,96 @@ body {
   color: #fde68a;
 }
 
+.tv-history-section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-right: 0.5rem;
+}
+
+.tv-history-header {
+  margin-bottom: 0.6rem;
+  flex-shrink: 0;
+}
+
+.tv-history-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, 1fr);
+  grid-auto-flow: row;
+  gap: 0.6rem;
+}
+
+.tv-history-week {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(55, 65, 81, 0.8);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tv-history-week-header {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #86efac;
+  margin-bottom: 0.4rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(75, 85, 99, 0.6);
+  flex-shrink: 0;
+}
+
+.tv-history-week-list {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tv-history-row {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.15rem;
+}
+
+.tv-history-row .leaderboard-main {
+  gap: 0.4rem;
+}
+
+.tv-history-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(34, 197, 94, 0.6);
+  flex-shrink: 0;
+}
+
+.tv-history-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.tv-history-pill {
+  min-width: 28px;
+  padding: 0.1rem 0.25rem;
+  font-size: 0.7rem;
+}
+
+.tv-history-percent {
+  min-width: 44px;
+  font-size: 0.8rem;
+}
+
 .chart-container {
   position: relative;
   width: 100%;

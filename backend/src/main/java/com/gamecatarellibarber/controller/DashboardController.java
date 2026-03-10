@@ -3,11 +3,14 @@ package com.gamecatarellibarber.controller;
 import com.gamecatarellibarber.dto.WeeklyProgressDto;
 import com.gamecatarellibarber.dto.WeeklyRankingDto;
 import com.gamecatarellibarber.service.DashboardService;
+import com.gamecatarellibarber.service.RevenueService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -39,6 +42,17 @@ public class DashboardController {
     @GetMapping("/ranking/month")
     public List<WeeklyRankingDto> getMonthlyRanking() {
         return dashboardService.getMonthlyRanking();
+    }
+
+    @GetMapping("/ranking/week/available-weeks")
+    public List<RevenueService.WeekInfo> getAvailableWeeks(@RequestParam(defaultValue = "8") int limit) {
+        return dashboardService.getAvailableWeeks(Math.min(limit, 20));
+    }
+
+    @GetMapping("/ranking/week/history")
+    public List<WeeklyRankingDto> getWeeklyRankingHistory(@RequestParam String weekStart) {
+        LocalDate date = LocalDate.parse(weekStart);
+        return dashboardService.getWeeklyRankingForWeek(date);
     }
 }
 

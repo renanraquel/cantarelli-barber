@@ -122,7 +122,13 @@ public class RevenueService {
     public Map<Long, BigDecimal> getCurrentWeekRevenuePerBarber() {
         LocalDate today = todayBrazil();
         LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate weekEnd = weekStart.plusDays(6); // Monday to Sunday (semana completa para incluir hoje quando for domingo)
+        return getWeeklyRevenuePerBarber(weekStart);
+    }
+
+    /** Receita por barbeiro para uma semana específica (segunda a domingo). */
+    @Transactional(readOnly = true)
+    public Map<Long, BigDecimal> getWeeklyRevenuePerBarber(LocalDate weekStart) {
+        LocalDate weekEnd = weekStart.plusDays(6);
 
         List<Revenue> revenues = revenueRepository.findByDateBetween(weekStart, weekEnd);
         Map<Long, BigDecimal> result = new HashMap<>();
@@ -134,6 +140,49 @@ public class RevenueService {
             result.put(barberId, current.add(rev.getValue() != null ? rev.getValue() : BigDecimal.ZERO));
         }
         return result;
+    }
+
+    /** Lista as últimas N semanas anteriores (exclui a atual) que possuem lançamentos (ordem: mais recente primeiro). */
+    @Transactional(readOnly = true)
+    public List<WeekInfo> getAvailableWeeks(int maxWeeks) {
+        LocalDate today = todayBrazil();
+        LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        weekStart = weekStart.minusWeeks(1); // exclui semana atual
+
+        List<WeekInfo> result = new java.util.ArrayList<>();
+        java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("dd/MM");
+        int count = 0;
+
+        for (int i = 0; i < maxWeeks * 2 && count < maxWeeks; i++) {
+            Map<Long, BigDecimal> revenue = getWeeklyRevenuePerBarber(weekStart);
+            if (!revenue.isEmpty()) {
+                LocalDate weekEnd = weekStart.plusDays(6);
+                result.add(new WeekInfo(
+                    weekStart.toString(),
+                    weekEnd.toString(),
+                    weekStart.format(fmt) + " - " + weekEnd.format(fmt)
+                ));
+                count++;
+            }
+            weekStart = weekStart.minusWeeks(1);
+        }
+        result.sort((a, b) -> b.getWeekStart().compareTo(a.getWeekStart()));
+        return result;
+    }
+
+    public static class WeekInfo {
+        private final String weekStart;
+        private final String weekEnd;
+        private final String label;
+
+        public WeekInfo(String weekStart, String weekEnd, String label) {
+            this.weekStart = weekStart;
+            this.weekEnd = weekEnd;
+            this.label = label;
+        }
+        public String getWeekStart() { return weekStart; }
+        public String getWeekEnd() { return weekEnd; }
+        public String getLabel() { return label; }
     }
 
     @Transactional(readOnly = true)

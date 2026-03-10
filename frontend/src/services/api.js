@@ -123,6 +123,14 @@ export const dashboardService = {
     const { data } = await api.get('/ranking/week');
     return data;
   },
+  async getAvailableWeeks(limit = 8) {
+    const { data } = await api.get('/ranking/week/available-weeks', { params: { limit } });
+    return data;
+  },
+  async getWeeklyRankingForWeek(weekStart) {
+    const { data } = await api.get('/ranking/week/history', { params: { weekStart } });
+    return data;
+  },
   async getMonthlyProgress() {
     const { data } = await api.get('/dashboard/progress/month');
     return data;

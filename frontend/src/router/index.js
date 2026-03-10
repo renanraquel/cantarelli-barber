@@ -8,6 +8,7 @@ import AdminRevenuePage from '../pages/AdminRevenuePage.vue';
 import AdminHallOfFamePage from '../pages/AdminHallOfFamePage.vue';
 import DashboardProgressPage from '../pages/DashboardProgressPage.vue';
 import DashboardRankingPage from '../pages/DashboardRankingPage.vue';
+import DashboardRankingHistoryPage from '../pages/DashboardRankingHistoryPage.vue';
 import DashboardProgressMonthlyPage from '../pages/DashboardProgressMonthlyPage.vue';
 import DashboardRankingMonthlyPage from '../pages/DashboardRankingMonthlyPage.vue';
 import DashboardHallOfFamePage from '../pages/DashboardHallOfFamePage.vue';
@@ -21,6 +22,7 @@ const routes = [
   { path: '/admin/hall-of-fame', component: AdminHallOfFamePage, meta: { adminOnly: true } },
   { path: '/dashboard/progress', component: DashboardProgressPage },
   { path: '/dashboard/ranking', component: DashboardRankingPage },
+  { path: '/dashboard/ranking-history', component: DashboardRankingHistoryPage },
   { path: '/dashboard/progress-monthly', component: DashboardProgressMonthlyPage },
   { path: '/dashboard/ranking-monthly', component: DashboardRankingMonthlyPage },
   { path: '/dashboard/hall-of-fame', component: DashboardHallOfFamePage },

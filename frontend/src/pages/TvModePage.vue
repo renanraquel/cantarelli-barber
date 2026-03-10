@@ -13,6 +13,7 @@
             Modo TV •
             <span v-if="currentView === 'progress'">Progresso Semanal</span>
             <span v-else-if="currentView === 'ranking'">Ranking Semanal</span>
+            <span v-else-if="currentView === 'rankingHistory'">Histórico Semanal</span>
             <span v-else-if="currentView === 'progressMonth'">Progresso Mensal</span>
             <span v-else-if="currentView === 'rankingMonth'">Ranking Mensal</span>
             <span v-else-if="currentView === 'brabo'">Brabo do Mês</span>
@@ -128,6 +129,49 @@
             </div>
             <div class="chart-container">
               <Bar v-if="rankingChart" :data="rankingChart" :options="rankingChartOptions" />
+            </div>
+          </div>
+        </section>
+
+        <section v-else-if="currentView === 'rankingHistory'" class="tv-history-section">
+          <div class="tv-panel-header tv-history-header">
+            <div class="tv-panel-title">Histórico Semanal</div>
+            <div class="tv-panel-subtitle">Rankings das semanas anteriores</div>
+          </div>
+          <div v-if="weeksWithRanking.length === 0" class="page-subtitle">
+            Nenhuma semana anterior com lançamentos.
+          </div>
+          <div v-else class="tv-history-grid">
+            <div
+              v-for="item in weeksWithRanking"
+              :key="item.week.weekStart"
+              class="tv-history-week"
+            >
+              <div class="tv-history-week-header">{{ item.week.label }}</div>
+              <div class="tv-history-week-list">
+                <div
+                  v-for="row in item.ranking"
+                  :key="`${item.week.weekStart}-${row.barberId}`"
+                  class="leaderboard-row tv-history-row"
+                  :style="leaderboardStyle(row.position)"
+                >
+                  <div class="leaderboard-main">
+                    <div class="position-pill tv-history-pill" :class="positionClass(row.position)">
+                      {{ medalFor(row.position) }} {{ row.position }}
+                    </div>
+                    <img
+                      v-if="row.photoUrl"
+                      :src="resolveBackendUrl(row.photoUrl)"
+                      alt=""
+                      class="tv-history-avatar"
+                    />
+                    <div class="tv-history-name">{{ row.barberName }}</div>
+                  </div>
+                  <div class="percent-pill tv-history-percent">
+                    {{ formatPercent(row.weeklyProgressPercent) }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -329,9 +373,10 @@ import { resolveBackendUrl } from '../services/api';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const currentView = ref('progress'); // progress | ranking | progressMonth | rankingMonth | brabo | hallOfFame
+const currentView = ref('progress'); // progress | ranking | rankingHistory | progressMonth | rankingMonth | brabo | hallOfFame
 const progress = ref([]);
 const ranking = ref([]);
+const weeksWithRanking = ref([]);
 const progressMonth = ref([]);
 const rankingMonth = ref([]);
 const latestHof = ref(null);
@@ -463,19 +508,29 @@ async function loadData() {
     progressMonthData,
     rankingMonthData,
     latestHofData,
-    hofListData
+    hofListData,
+    availableWeeks
   ] = await Promise.all([
     dashboardService.getWeeklyProgress(),
     dashboardService.getWeeklyRanking(),
     dashboardService.getMonthlyProgress(),
     dashboardService.getMonthlyRanking(),
     hallOfFameService.getLatest(),
-    hallOfFameService.list()
+    hallOfFameService.list(),
+    dashboardService.getAvailableWeeks(8)
   ]);
 
   progress.value = progressData;
   ranking.value = rankingData;
   progressMonth.value = progressMonthData;
+
+  const historyItems = await Promise.all(
+    availableWeeks.map(async (week) => {
+      const ranking = await dashboardService.getWeeklyRankingForWeek(week.weekStart);
+      return { week, ranking };
+    })
+  );
+  weeksWithRanking.value = historyItems;
   rankingMonth.value = rankingMonthData;
   latestHof.value = latestHofData;
   hofHistory.value = hofListData;
@@ -551,6 +606,8 @@ function startRotation() {
     if (currentView.value === 'progress') {
       currentView.value = 'ranking';
     } else if (currentView.value === 'ranking') {
+      currentView.value = 'rankingHistory';
+    } else if (currentView.value === 'rankingHistory') {
       currentView.value = 'progressMonth';
     } else if (currentView.value === 'progressMonth') {
       currentView.value = 'rankingMonth';

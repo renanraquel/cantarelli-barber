@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,39 @@ public class DashboardService {
         }
 
         return ranking;
+    }
+
+    /** Ranking semanal para uma semana específica (histórico). */
+    public List<WeeklyRankingDto> getWeeklyRankingForWeek(LocalDate weekStart) {
+        List<Barber> barbers = barberRepository.findByActiveTrueOrderByNameAsc();
+        Map<Long, BigDecimal> weeklyRevenueByBarber = revenueService.getWeeklyRevenuePerBarber(weekStart);
+
+        List<WeeklyRankingDto> ranking = barbers.stream()
+                .map(barber -> buildWeeklyProgress(
+                        barber,
+                        weeklyRevenueByBarber.getOrDefault(barber.getId(), BigDecimal.ZERO),
+                        BigDecimal.ZERO))
+                .sorted(Comparator.comparing(WeeklyProgressDto::getWeeklyProgressPercent).reversed())
+                .map(p -> {
+                    WeeklyRankingDto dto = new WeeklyRankingDto();
+                    dto.setBarberId(p.getBarberId());
+                    dto.setBarberName(p.getBarberName());
+                    dto.setPhotoUrl(p.getPhotoUrl());
+                    dto.setWeeklyProgressPercent(p.getWeeklyProgressPercent());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < ranking.size(); i++) {
+            ranking.get(i).setPosition(i + 1);
+        }
+
+        return ranking;
+    }
+
+    /** Semanas disponíveis para histórico (que possuem lançamentos). */
+    public List<RevenueService.WeekInfo> getAvailableWeeks(int maxWeeks) {
+        return revenueService.getAvailableWeeks(maxWeeks);
     }
 
     public List<WeeklyProgressDto> getMonthlyProgress() {

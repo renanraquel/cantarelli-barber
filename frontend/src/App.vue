@@ -11,6 +11,7 @@
       <nav class="main-nav">
         <RouterLink to="/dashboard/progress">Progresso Semanal</RouterLink>
         <RouterLink to="/dashboard/ranking">Ranking Semanal</RouterLink>
+        <RouterLink to="/dashboard/ranking-history">Histórico Semanal</RouterLink>
         <RouterLink to="/dashboard/progress-monthly">Progresso Mensal</RouterLink>
         <RouterLink to="/dashboard/ranking-monthly">Ranking Mensal</RouterLink>
         <RouterLink to="/dashboard/hall-of-fame">Hall da Fama</RouterLink>
