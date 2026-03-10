@@ -126,33 +126,27 @@ onMounted(loadAllHistory);
 
 <style scoped>
 .history-wrap {
-  height: calc(100vh - 11rem);
-  min-height: 280px;
+  min-height: 200px;
 }
 
 .history-stack {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: min-content;
   grid-auto-flow: row;
-  gap: 0.75rem;
-  height: 100%;
+  gap: 0.6rem;
 }
 
 .history-week-panel {
   background: rgba(31, 41, 55, 0.6);
-  border: 1px solid rgba(75, 85, 99, 0.4);
-  border-radius: 10px;
-  padding: 0.5rem 0.65rem;
-  min-height: 0;
+  border: 1px solid rgba(55, 65, 81, 0.8);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.6rem;
   display: flex;
   flex-direction: column;
 }
 
 .history-week-list {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -160,25 +154,26 @@ onMounted(loadAllHistory);
 
 .history-week-header {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #86efac;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.35rem;
-  border-bottom: 1px solid rgba(75, 85, 99, 0.5);
+  margin-bottom: 0.4rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(75, 85, 99, 0.6);
+  flex-shrink: 0;
 }
 
 .history-row {
   font-size: 0.8rem;
-  padding: 0.3rem 0.25rem;
+  padding: 0.2rem 0.15rem;
 }
 
 .history-row .leaderboard-main {
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .avatar-history {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
   object-fit: cover;
   border: 1px solid rgba(34, 197, 94, 0.6);
@@ -195,13 +190,13 @@ onMounted(loadAllHistory);
 }
 
 .history-pill {
-  min-width: 32px;
-  padding: 0.15rem 0.35rem;
-  font-size: 0.75rem;
+  min-width: 28px;
+  padding: 0.1rem 0.25rem;
+  font-size: 0.7rem;
 }
 
 .history-percent {
-  min-width: 48px;
+  min-width: 44px;
   font-size: 0.8rem;
 }
 </style>
