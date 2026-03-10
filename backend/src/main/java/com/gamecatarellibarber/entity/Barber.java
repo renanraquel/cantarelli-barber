@@ -17,6 +17,13 @@ public class Barber {
 
     private String photoUrl;
 
+    @Lob
+    @Column(name = "photo_data")
+    private byte[] photoData;
+
+    @Column(name = "photo_content_type", length = 100)
+    private String photoContentType;
+
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal weeklyGoal;
 
@@ -48,6 +55,22 @@ public class Barber {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public byte[] getPhotoData() {
+        return photoData;
+    }
+
+    public void setPhotoData(byte[] photoData) {
+        this.photoData = photoData;
+    }
+
+    public String getPhotoContentType() {
+        return photoContentType;
+    }
+
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
     }
 
     public BigDecimal getWeeklyGoal() {

@@ -53,5 +53,14 @@ public class BarberService {
         existing.setPhotoUrl(photoUrl);
         return barberRepository.save(existing);
     }
+
+    /** Salva a foto no banco de dados e define photoUrl para o endpoint de recuperação. */
+    public Barber storePhoto(Long id, byte[] photoData, String contentType) {
+        Barber existing = getById(id);
+        existing.setPhotoData(photoData);
+        existing.setPhotoContentType(contentType);
+        existing.setPhotoUrl("/api/barbers/" + id + "/photo");
+        return barberRepository.save(existing);
+    }
 }
 
