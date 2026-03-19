@@ -161,14 +161,17 @@ function barClass(value) {
 
 async function loadData() {
   const data = await dashboardService.getWeeklyProgress();
-  progress.value = data;
+  const sortedData = [...data].sort(
+    (a, b) => Number(b.weeklyProgressPercent ?? 0) - Number(a.weeklyProgressPercent ?? 0)
+  );
+  progress.value = sortedData;
 
   chartData.value = {
-    labels: data.map((d) => d.barberName),
+    labels: sortedData.map((d) => d.barberName),
     datasets: [
       {
         label: 'Progresso semanal',
-        data: data.map((d) => Number(d.weeklyProgressPercent ?? 0)),
+        data: sortedData.map((d) => Number(d.weeklyProgressPercent ?? 0)),
         backgroundColor: 'rgba(34,197,94,0.8)',
         borderRadius: 12,
         borderSkipped: false
